@@ -1,0 +1,47 @@
+program hello;
+
+{ pascal 
+    pascal
+}
+(* hello,
+
+    world *)
+//
+// hello, world
+// \n
+var i, 123: Integer;
+var arr: Integer[-10..10];
+
+begin
+    i := 10;
+    123 := 20;
+    WriteLn('123');
+    WriteLn('123');
+    i := 'qwdqwd';
+end.
+
+// Get()
+// GetIfEqual(char c)
+// Peek() 
+//
+// id: a..z, _
+//      a..z, _, 0..9
+//
+//  Lexer lexer = new Lexer(fstream);
+//  
+//
+// try {
+//      lexer.GetToken();
+// } catch (Exception) {
+//      Console.Writeln("");
+// }
+//
+//  program
+//  hello
+//  ;
+//  var
+//  i
+//  ,
+//  123
+//  :=
+//  ''
