@@ -1,6 +1,6 @@
 ﻿namespace Scanner;
 
-public class Position
+public class Position : ICloneable
 {
     private uint _line, _column;
 
@@ -27,6 +27,7 @@ public class Position
         ++_column;
     }
 
+    // tuple - кортеж
     public (uint, uint) GetValue()
     {
         return (_line, _column);
@@ -35,6 +36,11 @@ public class Position
     public override string ToString()
     {
         return $"({_line}, {_column})";
+    }
+
+    public object Clone()
+    {
+        return MemberwiseClone();
     }
 }
 

@@ -1,7 +1,20 @@
 ﻿using Scanner;
 
-var stream = new StreamReader("C:/PascalMinusMinus/pascal.txt");
+if (args.Length == 0)
+{
+    Console.WriteLine("Need to set a path to file");
+    return 1;
+}
 
+var filePath = args[1];
+
+if (!File.Exists(filePath))
+{
+    Console.WriteLine("File doesnt exist");
+    return 1;
+}
+
+var stream = new StreamReader(filePath);
 var scanner = new Scanner.Scanner(stream);
 
 for (;;)
@@ -11,3 +24,5 @@ for (;;)
 
     Console.WriteLine(token.ToString());
 }
+
+return 0;

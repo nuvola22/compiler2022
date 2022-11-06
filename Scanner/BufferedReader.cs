@@ -1,6 +1,4 @@
-﻿using System.Dynamic;
-
-namespace Scanner;
+﻿namespace Scanner;
 
 public class BufferedReader
 {
@@ -20,7 +18,11 @@ public class BufferedReader
 
     protected int Get()
     {
-        _buffer += (char)Peek();
+        var c = (char)Peek();
+        if (c == '\n')
+            _position.AddLine();
+        else if (c != '\r') _position.AddColumn();
+        _buffer += c;
         return _streamReader.Read();
     }
 
@@ -50,6 +52,7 @@ public class BufferedReader
         return false;
     }
 
+    // End of file
     protected bool Eof()
     {
         return _streamReader.EndOfStream;

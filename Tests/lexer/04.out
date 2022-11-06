@@ -1,0 +1,14 @@
+1		1		Separator			LPar				(
+1		2		Separator			LBra				[
+1		3		Operation			Add				+
+1		4		Operation			AddAsg				+=
+1		6		Operation			Sub				-
+1		7		Operation			SubAsg				-=
+1		9		Separator			Col				:
+1		10		Operation			Asg				:=
+1		12		Separator			RBra				]
+1		13		Separator			RPar				)
+1		14		Separator			Col				:
+1		15		Separator			Sem				;
+1		16		Separator			Range				..
+1		18		Eof							.

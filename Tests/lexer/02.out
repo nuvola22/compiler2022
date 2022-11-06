@@ -1,0 +1,12 @@
+1		1		LitStr			'123123'				'123123'
+1		9		LitStr			'1231'				'1231'
+2		1		LitInt			2				2
+3		1		LitInt			123				123
+4		1		LitDob			2,3				2.3
+5		1		LitDob			2000				2e3
+6		1		LitDob			2000				2e+3
+7		1		LitDob			0,002				2e-3
+8		1		LitDob			12				1.2e1
+9		1		LitDob			12				1.2e+1
+10		1		LitDob			0,012				1.2e-2
+10		7		Eof							￿

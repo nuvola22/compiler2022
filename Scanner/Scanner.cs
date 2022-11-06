@@ -2,16 +2,27 @@
 
 namespace Scanner;
 
+public class ScannerException : Exception
+{
+    public ScannerException(Position pos, string message)
+        : base($"{pos}, {message}")
+    {
+    }
+}
+
 public class Scanner : BufferedReader
 {
+    private Position _posInTokenBegin;
+
     public Scanner(StreamReader streamReader) : base(streamReader)
     {
+        _posInTokenBegin = Pos;
     }
 
     public Token GetToken()
     {
         var c = SkipCommentsAndSpaces();
-
+        _posInTokenBegin = (Position)Pos.Clone();
         BufferSet(c.ToString());
 
         if (Eof())
@@ -89,7 +100,7 @@ public class Scanner : BufferedReader
         {
             Get();
             if (Eof())
-                throw new Exception();
+                throw CreateException("Comment doesnt closed");
         }
     }
 
@@ -120,8 +131,7 @@ public class Scanner : BufferedReader
             10 => IsDecDigit(c),
             16 => IsHexDigit(c),
             8 => IsOctDigit(c),
-            2 => IsBinDigit(c),
-            _ => throw new ArgumentOutOfRangeException(nameof(@base), @base, null)
+            _ => IsBinDigit(c)
         };
     }
 
@@ -148,15 +158,15 @@ public class Scanner : BufferedReader
         {
             digits = Digits(10);
             type = TokenType.LitDob;
-            if (digits == 0) throw new Exception();
+            if (digits == 0) throw CreateException("Invalid Integer");
         }
-        
+
         if (GetIfEqual('e') || GetIfEqual('E'))
         {
             var _ = GetIfEqual('+') || GetIfEqual('-');
             digits = Digits(10);
             type = TokenType.LitDob;
-            if (digits == 0) throw new Exception();
+            if (digits == 0) throw CreateException("Invalid Integer");
         }
 
         if (type == TokenType.LitDob)
@@ -175,7 +185,7 @@ public class Scanner : BufferedReader
         }
         catch (OverflowException)
         {
-            throw new Exception();
+            throw CreateException("Integer Overflow");
         }
     }
 
@@ -196,7 +206,7 @@ public class Scanner : BufferedReader
 
         var digits = Digits(@base);
 
-        if (digits == 0) throw new Exception();
+        if (digits == 0) throw CreateException("Invalid Integer");
 
         try
         {
@@ -204,7 +214,7 @@ public class Scanner : BufferedReader
         }
         catch (OverflowException)
         {
-            throw new Exception();
+            throw CreateException("Integer Overflow");
         }
     }
 
@@ -220,11 +230,10 @@ public class Scanner : BufferedReader
 
     private Token ReadId()
     {
-        while (IsIdContinuation((char)Peek()))
-        {
-            Get();
-        }
+        while (IsIdContinuation((char)Peek())) Get();
 
+        // program
+        // 
         try
         {
             return CreateToken(TokenType.Keyword,
@@ -296,7 +305,8 @@ public class Scanner : BufferedReader
     {
         do
         {
-            Get();
+            var c = (char)Get();
+            if (c == '\n') throw CreateException("String exceed line");
         } while (BufferPeek() != '\'');
 
         return CreateToken(TokenType.LitStr, Buffer);
@@ -304,6 +314,11 @@ public class Scanner : BufferedReader
 
     private Token CreateToken(TokenType type, object value)
     {
-        return new Token(Pos, type, value, Buffer);
+        return new Token(_posInTokenBegin, type, value, Buffer);
+    }
+
+    private ScannerException CreateException(string message)
+    {
+        return new ScannerException(_posInTokenBegin, message);
     }
 }
