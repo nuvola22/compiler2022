@@ -25,9 +25,6 @@ public class Scanner : BufferedReader
         _posInTokenBegin = (Position)Pos.Clone();
         BufferSet(c.ToString());
 
-        if (Eof())
-            return CreateToken(TokenType.Eof, "");
-
         if (IsDigit(c, 10))
             return ReadNumber();
 
@@ -41,6 +38,9 @@ public class Scanner : BufferedReader
             return ReadString();
 
         var token = ReadOperationOrSeparator();
+
+        if (Eof())
+            return CreateToken(TokenType.Eof, "");
 
         return token;
     }
@@ -225,7 +225,7 @@ public class Scanner : BufferedReader
 
     private static bool IsIdContinuation(char c)
     {
-        return c is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or '_' or >= '0' and <= '9';
+        return IsIdBegin(c) || IsDigit(c, 10);
     }
 
     private Token ReadId()
@@ -309,6 +309,7 @@ public class Scanner : BufferedReader
             if (c == '\n') throw CreateException("String exceed line");
         } while (BufferPeek() != '\'');
 
+        // 'abc'#65#66'123'
         return CreateToken(TokenType.LitStr, Buffer);
     }
 

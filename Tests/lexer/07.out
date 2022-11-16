@@ -1,0 +1,8 @@
+1		1		LitInt			1				1
+1		2		Operation			Div				/
+1		3		LitInt			2				2
+1		4		Operation			Mul				*
+1		5		LitInt			3				3
+1		6		Operation			Div				/
+1		7		LitInt			4				4
+1		8		Eof							￿

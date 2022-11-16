@@ -199,7 +199,7 @@ public enum Keywords
     Write
 }
 
-public class Token
+public class Token : ICloneable
 {
     private Position _pos;
     private TokenType _type;
@@ -223,5 +223,10 @@ public class Token
     {
         var (line, column) = _pos.GetValue();
         return $"{line}\t\t{column}\t\t{Type.ToString()}\t\t\t{Value}\t\t\t\t{Raw}";
+    }
+
+    public object Clone()
+    {
+        return MemberwiseClone();
     }
 }
