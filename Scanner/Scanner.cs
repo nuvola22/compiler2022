@@ -39,6 +39,9 @@ public class Scanner : BufferedReader
 
         var token = ReadOperationOrSeparator();
 
+        if (token.Type != TokenType.Unexpected)
+            return token;
+
         if (Eof())
             return CreateToken(TokenType.Eof, "");
 

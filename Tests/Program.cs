@@ -65,7 +65,7 @@ Result RunScannerTests(IEnumerable<string> files)
                 }
                 else
                 {
-                    result.MarkSuccessed();
+                    result.MarkSucceed();
                 }
 
                 break;
@@ -82,7 +82,7 @@ Result RunScannerTests(IEnumerable<string> files)
 
             if (token.Type == TokenType.Eof)
             {
-                result.MarkSuccessed();
+                result.MarkSucceed();
                 break;
             }
         }
@@ -133,7 +133,7 @@ Result RunParserTests(IEnumerable<string> files)
 
         if (String.CompareOrdinal(outContent, parserResult) != 0)
         {
-            result.MarkSuccessed();
+            result.MarkSucceed();
         }
         else
         {
@@ -178,7 +178,7 @@ public class Result
         _failedTests++;
     }
 
-    public void MarkSuccessed()
+    public void MarkSucceed()
     {
         _allTests++;
     }

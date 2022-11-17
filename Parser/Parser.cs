@@ -73,9 +73,10 @@ public class Parser
             _currentToken = _scanner.GetToken();
             var expression = ParseExpression();
 
-            if (_currentToken.Type != TokenType.Separator ||
-                !(_currentToken.Type == TokenType.Separator && (Separator)_currentToken.Value == Separator.RBra))
+            if (!(_currentToken.Type == TokenType.Separator && (Separator)_currentToken.Value == Separator.RPar))
+            {
                 throw new ParserException(_currentToken.Pos, "Expected )");
+            }
 
             _currentToken = _scanner.GetToken();
             return expression;

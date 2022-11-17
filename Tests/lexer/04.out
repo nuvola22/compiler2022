@@ -11,4 +11,5 @@
 1		14		Separator			Col				:
 1		15		Separator			Sem				;
 1		16		Separator			Range				..
-1		18		Eof							.
+1		18		Separator			Dot				.
+1		19		Eof							￿
