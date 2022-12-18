@@ -19,7 +19,7 @@ public class Scanner : BufferedReader
         _posInTokenBegin = Pos;
     }
 
-    public Token GetToken()
+    public Token? GetToken()
     {
         var c = SkipCommentsAndSpaces();
         _posInTokenBegin = (Position)Pos.Clone();
@@ -150,7 +150,7 @@ public class Scanner : BufferedReader
         return count;
     }
 
-    private Token ReadNumber()
+    private Token? ReadNumber()
     {
         uint digits;
         var type = TokenType.LitInt;
@@ -159,6 +159,11 @@ public class Scanner : BufferedReader
 
         if (GetIfEqual('.'))
         {
+            if (Peek() == '.')
+            {
+                UnGet();
+                return CreateToken(type, int.Parse(Buffer));
+            }
             digits = Digits(10);
             type = TokenType.LitDob;
             if (digits == 0) throw CreateException("Invalid Integer");
@@ -197,7 +202,7 @@ public class Scanner : BufferedReader
         return prefix is '$' or '&' or '%';
     }
 
-    private Token ReadNotDecimalNumber(char c)
+    private Token? ReadNotDecimalNumber(char c)
     {
         uint @base = c switch
         {
@@ -231,7 +236,7 @@ public class Scanner : BufferedReader
         return IsIdBegin(c) || IsDigit(c, 10);
     }
 
-    private Token ReadId()
+    private Token? ReadId()
     {
         while (IsIdContinuation((char)Peek())) Get();
 
@@ -250,7 +255,7 @@ public class Scanner : BufferedReader
         }
     }
 
-    private Token ReadOperationOrSeparator()
+    private Token? ReadOperationOrSeparator()
     {
         var punctuation = new List<(string, (TokenType, object))>
         {
@@ -258,6 +263,7 @@ public class Scanner : BufferedReader
             (")", (TokenType.Separator, Separator.RPar)),
             ("[", (TokenType.Separator, Separator.LBra)),
             ("]", (TokenType.Separator, Separator.RBra)),
+            (",", (TokenType.Separator, Separator.Comma)),
             (".", (TokenType.Separator, Separator.Dot)),
             ("..", (TokenType.Separator, Separator.Range)),
             (";", (TokenType.Separator, Separator.Sem)),
@@ -299,12 +305,12 @@ public class Scanner : BufferedReader
         return token;
     }
 
-    private bool IsStringBegin(char c)
+    private static bool IsStringBegin(char c)
     {
         return c == '\'';
     }
 
-    private Token ReadString()
+    private Token? ReadString()
     {
         do
         {
@@ -316,7 +322,7 @@ public class Scanner : BufferedReader
         return CreateToken(TokenType.LitStr, Buffer);
     }
 
-    private Token CreateToken(TokenType type, object value)
+    private Token? CreateToken(TokenType type, object value)
     {
         return new Token(_posInTokenBegin, type, value, Buffer);
     }

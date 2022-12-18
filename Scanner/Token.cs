@@ -27,7 +27,11 @@ public class Position : ICloneable
         ++_column;
     }
 
-    // tuple - кортеж
+    public void SubColumn()
+    {
+        --_column;
+    }
+    
     public (uint, uint) GetValue()
     {
         return (_line, _column);
@@ -84,6 +88,7 @@ public enum Separator
     RPar, // )
     LBra, // [
     RBra, // ]
+    Comma, // ,
     Dot, // .
     Range, // ..
     Sem, // ;
@@ -217,6 +222,31 @@ public class Token : ICloneable
         _type = type;
         _value = value;
         _raw = raw;
+    }
+
+    public bool Equals(Operation op)
+    {
+        return Equals(TokenType.Operation) && ((Operation)_value).Equals(op);
+    }
+
+    public bool Equals(Separator sep)
+    {
+        return Equals(TokenType.Separator) && ((Separator)_value).Equals(sep);
+    }
+
+    public bool Equals(Keywords keyword)
+    {
+        return Equals(TokenType.Keyword) && ((Keywords)_value).Equals(keyword);
+    }
+
+    public bool Equals(TokenType type)
+    {
+        return Type == type;
+    }
+
+    public bool EqualsArray(params object[] args)
+    {
+        return args.Any(arg => Equals(Convert.ChangeType(arg, arg.GetType())));
     }
 
     public override string ToString()

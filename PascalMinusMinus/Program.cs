@@ -26,7 +26,7 @@ void RunParser(string filePath)
     var stream = new StreamReader(filePath);
     var scanner = new Scanner.Scanner(stream);
     var parser = new Parser.Parser(scanner);
-    var head = parser.ParseExpression();
+    var head = parser.Program();
     head.Draw(Console.Out, 0);
 }
 

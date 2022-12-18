@@ -15,7 +15,7 @@ Result RunScannerTests(IEnumerable<string> files)
     foreach (var file in files)
     {
         Scanner.Scanner? scanner;
-        Token token;
+        Token? token;
         Console.WriteLine(file);
 
         if (!File.Exists(file + ".out"))
@@ -111,7 +111,7 @@ Result RunParserTests(IEnumerable<string> files)
             try
             {
                 writer = new StringWriter();
-                parser.ParseExpression().Draw(writer, 1);
+                parser.Program().Draw(writer, 1);
                 streamOutWriter.WriteLine(writer.ToString());
                 Console.WriteLine(writer.ToString());
             }
@@ -128,10 +128,18 @@ Result RunParserTests(IEnumerable<string> files)
         var outContent = File.ReadAllText(file + ".out");
 
         writer = new StringWriter();
-        parser.ParseExpression().Draw(writer, 1);
-        var parserResult = writer.ToString();
-
-        if (String.CompareOrdinal(outContent, parserResult) != 0)
+        string parserResult;
+        try
+        {
+            var head = parser.Program();
+            head.Draw(writer, 1);
+            parserResult = writer.ToString();
+        }
+        catch (Exception ex)
+        {
+            parserResult = ex.Message;
+        }
+        if (outContent == parserResult)
         {
             result.MarkSucceed();
         }
