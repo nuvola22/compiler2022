@@ -28,9 +28,8 @@ public class Parser
     {
         var left = SimpleExpression();
         var token = _currentToken;
-        
-        while (token.Equals(Operation.Eq) || token.Equals(Operation.Neq) || token.Equals(Operation.Lt) ||
-               token.Equals(Operation.Gt) || token.Equals(Operation.Lte) || token.Equals(Operation.Gte))
+
+        while (token.Equals(Operation.Eq, Operation.Neq, Operation.Lt, Operation.Gt, Operation.Lte, Operation.Gte))
         {
             _currentToken = _scanner.GetToken();
             left = new NodeRelOp(token, left, SimpleExpression());
@@ -79,6 +78,10 @@ public class Parser
         _currentToken = _scanner.GetToken();
         return new NodeUnOp(op, SimpleTerm());
     }
+    
+    // if True writeln(1);
+    //
+    // 
 
     private SyntaxNode Factor()
     {
@@ -93,6 +96,12 @@ public class Parser
         if (token.Equals(TokenType.Id))
         {
             return VarRef(Id());
+        }
+
+        if (token.Equals(Keywords.True) || token.Equals(Keywords.False))
+        {
+            _currentToken = _scanner.GetToken();
+            return new NodeBoolean(token);
         }
 
         if (token.Equals(TokenType.LitStr))
@@ -292,6 +301,13 @@ public class Parser
         //     1..3       array
         //              /      \
         //             4..5     integer
+        
+        // var a: array[1..3,4..5,0..10] of integer;
+        //
+        // a[2] -> array[4..5,0..10] of integer;
+        
+        // array[1..3] of array[4..5] of array [0..10] of integer;
+        // a[2] -> array[4..5] of array [0..10] of integer;
         Require(Separator.LBra);
         _currentToken = _scanner.GetToken();
         var ranges = new List<SyntaxNode> { Range() };
@@ -305,7 +321,17 @@ public class Parser
         Require(Keywords.Of);
         _currentToken = _scanner.GetToken();
         var type = Type();
-        return new NodeArrayType(ranges, type);
+        //
+        // array[1..3,4..5,0..10] of integer;
+        // array[0..10] of integer;
+        // array[4..5] of array[0..10] of integer;
+        // array[1..3] of array[4..5] of array[0..10] of integer;
+        var res = new NodeArrayType(ranges[^1], type);
+        for (var i = ranges.Count - 2; i >= 0; i++)
+        {
+            res = new NodeArrayType(ranges[i], res);
+        }
+        return res;
     }
 
     private SyntaxNode Range()
@@ -330,13 +356,15 @@ public class Parser
         //     /    |       \
         //    a     :=      10
         
+        // begin a += b; end.
+
         var varRef = Expression();
         if (varRef is NodeCall)
         {
             return varRef;
         }
 
-        if (varRef is NodeVariable or NodeArrayAccess or NodeArrayAccess or NodeRecordAccess)
+        if (varRef is NodeVariable or NodeArrayAccess or NodeRecordAccess)
         {
             if (!(_currentToken.Equals(Operation.Asg) || _currentToken.Equals(Operation.AddAsg) ||
                   _currentToken.Equals(Operation.SubAsg) || _currentToken.Equals(Operation.MulAsg) ||
@@ -485,7 +513,7 @@ public class Parser
         a.AddRange(b);
     }
 
-    public List<SyntaxNode> Declarations(bool parseFunctions = false)
+    public List<SyntaxNode> Declarations()
     {
         var declarations = new List<SyntaxNode>();
         while (true)
@@ -505,12 +533,12 @@ public class Parser
                 _currentToken = _scanner.GetToken();
                 CopyElements(declarations, VarDeclarations());
             }
-            else if (parseFunctions && _currentToken.Equals(Keywords.Procedure))
+            else if (_currentToken.Equals(Keywords.Procedure))
             {
                 _currentToken = _scanner.GetToken();
                 declarations.Add(ProcedureDeclaration());
             }
-            else if (parseFunctions && _currentToken.Equals(Keywords.Function))
+            else if (_currentToken.Equals(Keywords.Function))
             {
                 _currentToken = _scanner.GetToken();
                 declarations.Add(FunctionDeclaration());
@@ -611,14 +639,20 @@ public class Parser
 
     public SyntaxNode Program()
     {
-        var declarations = Declarations(true);
+        // type a = Integer;
+        // procedure b();
+        // var a: Integer = 10;
+        // begin end;
+        // begin end.
+        var declarations = Declarations();
         Require(Keywords.Begin);
         _currentToken = _scanner.GetToken();
         var begin = BeginStatement();
         Require(Separator.Dot);
         return new NodeProgram(declarations, begin);
     }
-
+    
+    // a, b, c: Integer; a_1, b_1, c_1: Integer)
     public List<SyntaxNode> ParametersDeclaration()
     {
         if (_currentToken.Equals(Separator.RPar))
@@ -640,6 +674,9 @@ public class Parser
         return declarations;
     }
 
+    // a, b, c: Integer
+    // var a,b,c :Integer
+    // const a,b,c:Integer
     public List<SyntaxNode> ParameterDeclaration()
     {
         SyntaxNode? mod = null;
@@ -656,6 +693,11 @@ public class Parser
         return ids.Select(id => new NodeParameterDeclaration(mod, id, type)).Cast<SyntaxNode>().ToList();
     }
 
+    // a();
+    // var a: integer = 10;
+    // begin
+    // end;
+    // begin end.
     public SyntaxNode ProcedureDeclaration()
     {
         var id = Id();

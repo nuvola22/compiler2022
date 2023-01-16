@@ -98,6 +98,8 @@ public class Scanner : BufferedReader
     private void SkipBlockComment(bool firstBrace)
     {
         Get();
+        // {}
+        // (* *)
         while ((!firstBrace && !(BufferPeek() == '*' && GetIfEqual(')'))) ||
                (firstBrace && BufferPeek() != '}'))
         {
@@ -241,11 +243,11 @@ public class Scanner : BufferedReader
         while (IsIdContinuation((char)Peek())) Get();
 
         // program
-        // 
+        // program -> Program 
         try
         {
             return CreateToken(TokenType.Keyword,
-                (Keywords)Enum.Parse(typeof(Keywords),
+                (Keywords)Enum.Parse(typeof(Keywords), 
                     CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Buffer.ToLower()))
             );
         }

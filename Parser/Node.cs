@@ -131,6 +131,19 @@ public class NodeString : SyntaxNode
     }
 }
 
+public class NodeBoolean : SyntaxNode
+{
+    public NodeBoolean(Token token) : base(token)
+    {
+    }
+
+    public override void Draw(TextWriter writer, int depth)
+    {
+        DrawIndent(writer, depth);
+        writer.WriteLine(Token.Value);
+    }
+}
+
 public class NodeVariable : NodeVarRef
 {
     public NodeVariable(Token token) : base(token)
@@ -239,10 +252,10 @@ public class NodePrimitiveType : SyntaxNode
 
 public class NodeArrayType : SyntaxNode
 {
-    private List<SyntaxNode> Ranges { get; }
+    private SyntaxNode Ranges { get; }
     private SyntaxNode Type { get; }
 
-    public NodeArrayType(List<SyntaxNode> ranges, SyntaxNode type) : base(default)
+    public NodeArrayType(SyntaxNode ranges, SyntaxNode type) : base(default)
     {
         Ranges = ranges;
         Type = type;
@@ -252,7 +265,8 @@ public class NodeArrayType : SyntaxNode
     {
         DrawIndent(writer, depth);
         writer.WriteLine("array");
-        DrawList(writer, depth + 1, Ranges);
+        // DrawIndent(writer, depth + 1);
+        Ranges.Draw(writer, depth + 1);
         Type.Draw(writer, depth + 1);
     }
 }

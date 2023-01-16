@@ -224,9 +224,9 @@ public class Token : ICloneable
         _raw = raw;
     }
 
-    public bool Equals(Operation op)
+    public bool Equals(params Operation[] ops)
     {
-        return Equals(TokenType.Operation) && ((Operation)_value).Equals(op);
+        return ops.Any(op => Equals(TokenType.Operation) && ((Operation)_value).Equals(op));
     }
 
     public bool Equals(Separator sep)
