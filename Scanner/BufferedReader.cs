@@ -30,8 +30,6 @@ public class BufferedReader
         {
             c = (char)_streamReader.Read();
         }
-        // program hello;\n\r
-        // begin end.
         if (c == '\n')
             _position.AddLine();
         else if (c != '\r') _position.AddColumn();
@@ -42,7 +40,7 @@ public class BufferedReader
     protected void UnGet()
     {
         _char_buffer.Add(_buffer[^1]);
-        _buffer = _buffer.Remove(_buffer[^1]);
+        _buffer = _buffer.Remove(_buffer.Length - 1);
         _position.SubColumn();
     }
 

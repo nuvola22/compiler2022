@@ -1,0 +1,17 @@
+procedure a();
+begin
+    writeln('Hello, world');
+end;
+
+procedure b(var c: Integer; const e: String);
+begin
+    writeln(e, c);
+end;
+
+procedure d();
+const hello = 'Hello, world';
+begin
+    writeln(hello);
+end;
+
+begin end.

@@ -1,3 +1,5 @@
-*
-      3
-      3
+      program
+         constant
+            a
+            123
+         begin

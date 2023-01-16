@@ -1,0 +1,38 @@
+var a: Real = 10;
+    b: Real = 11;
+    c: Real = 12;
+    d: Real = 13;
+
+begin
+    writeln(+3);
+    writeln(-3);
+    writeln(-+---++--3);
+    writeln(2+++++3);
+    writeln(2-++++3);
+
+    writeln(2 + 3);
+    writeln(2 - 3);
+    writeln(2 * 3);
+    writeln(2 / 3);
+
+    writeln(a + 3);
+    writeln(a - 3);
+    writeln(a * 3);
+    writeln(a / 3);
+
+    writeln(a + a);
+    writeln(a - a);
+    writeln(a * a);
+    writeln(a / a);
+
+    writeln(a + b + c + d);
+    writeln(a + b + c + d * a);
+
+    writeln(a - b - c - d);
+    writeln(a - b - c - d * a);
+
+    writeln(a / b * c / b);
+
+    writeln(a div b);
+
+end.

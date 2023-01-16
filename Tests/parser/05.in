@@ -1,1 +1,5 @@
-﻿3/4+1/2
+﻿const a = 1;
+const b: Integer = 1;
+    c = 1 + 1;
+    d = 'Hello, world';
+begin end.

@@ -112,7 +112,7 @@ Result RunParserTests(IEnumerable<string> files)
             {
                 writer = new StringWriter();
                 parser.Program().Draw(writer, 1);
-                streamOutWriter.WriteLine(writer.ToString());
+                streamOutWriter.Write(writer.ToString());
                 Console.WriteLine(writer.ToString());
             }
             catch (Exception ex)

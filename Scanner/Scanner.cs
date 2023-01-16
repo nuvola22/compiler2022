@@ -241,9 +241,7 @@ public class Scanner : BufferedReader
     private Token? ReadId()
     {
         while (IsIdContinuation((char)Peek())) Get();
-
-        // program
-        // program -> Program 
+        
         try
         {
             return CreateToken(TokenType.Keyword,

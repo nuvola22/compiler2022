@@ -1,7 +1,5 @@
-/
-      *
-         /
-            3
-            4
-         1
-      2
+      program
+         type declaration
+            i
+            Integer
+         begin

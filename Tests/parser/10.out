@@ -1,0 +1,33 @@
+      program
+         a
+            parameters:
+            declarations:
+            begin
+               call
+                  writeln
+                  'Hello, world'
+         b
+            parameters:
+               Var
+               c
+               Integer
+               Const
+               e
+               String
+            declarations:
+            begin
+               call
+                  writeln
+                  e
+                  c
+         d
+            parameters:
+            declarations:
+               constant
+                  hello
+                  'Hello, world'
+            begin
+               call
+                  writeln
+                  hello
+         begin

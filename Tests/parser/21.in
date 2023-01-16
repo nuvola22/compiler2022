@@ -1,0 +1,14 @@
+var a: Real = 10;
+    b: Real = 11;
+    c: Real = 12;
+    d: Real = 13;
+
+begin
+    writeln(2 <> 3);
+    writeln(2 < 3);
+    writeln(2 <= 3);
+    writeln(2 >= 3);
+    writeln(2 > 3);
+    writeln(2 = 3);
+
+end.

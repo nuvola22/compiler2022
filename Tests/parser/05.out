@@ -1,7 +1,17 @@
-+
-      /
-         3
-         4
-      /
-         1
-         2
+      program
+         constant
+            a
+            1
+         constant
+            b
+            Integer
+            1
+         constant
+            c
+            +
+               1
+               1
+         constant
+            d
+            'Hello, world'
+         begin

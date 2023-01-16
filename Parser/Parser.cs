@@ -78,10 +78,6 @@ public class Parser
         _currentToken = _scanner.GetToken();
         return new NodeUnOp(op, SimpleTerm());
     }
-    
-    // if True writeln(1);
-    //
-    // 
 
     private SyntaxNode Factor()
     {
@@ -233,7 +229,6 @@ public class Parser
 
     public SyntaxNode Type()
     {
-        // var a: string;
         if (_currentToken.Equals(TokenType.Id) || _currentToken.Equals(Keywords.String))
         {
             var t = _currentToken;
@@ -281,7 +276,7 @@ public class Parser
             }
             // a = {1,2,3,4,5}
             // a = a.concat({6,7,8})
-            // {1,2,3,4,5, 6,7,8}
+            // {1,2,3,4,5,6,7,8}
             fields = fields.Concat(Fields()).ToList();
         }
 

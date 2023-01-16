@@ -1,0 +1,14 @@
+      program
+         variable
+            a
+            array
+               range
+                  0
+                  10
+               Integer
+         begin
+            call
+               writeln
+               array access
+                  a
+                  0

@@ -1,0 +1,5 @@
+var a: Integer = 1;
+
+begin 
+writeln(a); 
+end.
