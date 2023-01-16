@@ -634,11 +634,6 @@ public class Parser
 
     public SyntaxNode Program()
     {
-        // type a = Integer;
-        // procedure b();
-        // var a: Integer = 10;
-        // begin end;
-        // begin end.
         var declarations = Declarations();
         Require(Keywords.Begin);
         _currentToken = _scanner.GetToken();
@@ -687,12 +682,7 @@ public class Parser
         var type = Type();
         return ids.Select(id => new NodeParameterDeclaration(mod, id, type)).Cast<SyntaxNode>().ToList();
     }
-
-    // a();
-    // var a: integer = 10;
-    // begin
-    // end;
-    // begin end.
+    
     public SyntaxNode ProcedureDeclaration()
     {
         var id = Id();
